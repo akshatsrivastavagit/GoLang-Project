@@ -1,0 +1,33 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.cov
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+*.code-workspace
+
+# IDE/editor configs
+.idea/
+.vscode/
+
+# Environment files
+.env
+.env.*
+
+# PostgreSQL/Redis data (if any local mounts)
+pgdata/
+redisdata/
+
+# Logs
+*.log
+logs/ 

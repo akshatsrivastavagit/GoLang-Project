@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Omnichannel Inventory Test</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 2em auto;
+      }
+      input,
+      button {
+        margin: 0.5em 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Inventory API Tester</h1>
+    <h2>Add/Update Stock</h2>
+    <input id="sku" placeholder="SKU" />
+    <input id="warehouse" placeholder="Warehouse ID" type="number" />
+    <input id="qty" placeholder="Quantity" type="number" />
+    <button onclick="addOrUpdate()">Add/Update</button>
+    <pre id="addResult"></pre>
+
+    <h2>Get Consolidated Stock</h2>
+    <input id="skuStock" placeholder="SKU" />
+    <button onclick="getStock()">Get Stock</button>
+    <pre id="stockResult"></pre>
+
+    <h2>Simulate Order</h2>
+    <input id="skuOrder" placeholder="SKU" />
+    <input id="channel" placeholder="Channel" />
+    <input id="orderQty" placeholder="Quantity" type="number" />
+    <button onclick="order()">Order</button>
+    <pre id="orderResult"></pre>
+
+    <h2>Inventory History</h2>
+    <input id="skuHist" placeholder="SKU" />
+    <button onclick="getHistory()">Get History</button>
+    <pre id="histResult"></pre>
+
+    <script>
+      const api = (path, opts) => fetch(path, opts).then((r) => r.json());
+      function addOrUpdate() {
+        api("/inventory/add_or_update", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sku: document.getElementById("sku").value,
+            warehouse_id: +document.getElementById("warehouse").value,
+            quantity: +document.getElementById("qty").value,
+          }),
+        }).then(
+          (r) =>
+            (document.getElementById("addResult").textContent = JSON.stringify(
+              r,
+              null,
+              2
+            ))
+        );
+      }
+      function getStock() {
+        api(
+          "/inventory/stock/" + document.getElementById("skuStock").value
+        ).then(
+          (r) =>
+            (document.getElementById("stockResult").textContent =
+              JSON.stringify(r, null, 2))
+        );
+      }
+      function order() {
+        api("/inventory/order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sku: document.getElementById("skuOrder").value,
+            channel: document.getElementById("channel").value,
+            quantity: +document.getElementById("orderQty").value,
+          }),
+        }).then(
+          (r) =>
+            (document.getElementById("orderResult").textContent =
+              JSON.stringify(r, null, 2))
+        );
+      }
+      function getHistory() {
+        api(
+          "/inventory/history/" + document.getElementById("skuHist").value
+        ).then(
+          (r) =>
+            (document.getElementById("histResult").textContent = JSON.stringify(
+              r,
+              null,
+              2
+            ))
+        );
+      }
+    </script>
+  </body>
+</html>
